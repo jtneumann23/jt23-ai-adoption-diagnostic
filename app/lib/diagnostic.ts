@@ -27,11 +27,11 @@ export type MaturityLevel = {
 };
 
 const scaleOptions: Question["options"] = [
-  { value: 1, label: "Not in place" },
-  { value: 2, label: "Early thinking" },
-  { value: 3, label: "Some progress" },
-  { value: 4, label: "Working well" },
-  { value: 5, label: "Clear and consistent" },
+  { value: 1, label: "Not ready" },
+  { value: 2, label: "Patchy" },
+  { value: 3, label: "Some traction" },
+  { value: 4, label: "Working" },
+  { value: 5, label: "Clear habit" },
 ];
 
 const makeQuestions = (prefix: string, prompts: string[]): Question[] =>
@@ -46,69 +46,69 @@ export const assessments: Assessment[] = [
     id: "literacy",
     title: "AI Literacy Check",
     description:
-      "See how well your team understands AI basics, useful tasks, prompting, privacy, and judgment.",
+      "Find out whether your team can use AI with judgment, or whether people are guessing their way through it.",
     audience:
-      "For owners, managers, and teams who want a plain starting point before choosing tools.",
+      "For owners, managers, and teams who need shared language before AI habits spread unevenly.",
     questions: makeQuestions("literacy", [
-      "Our team understands what AI tools can and cannot do.",
-      "We can spot everyday tasks where AI could save time.",
-      "People feel confident writing clear prompts and improving the output.",
-      "We know how to fact-check AI output before using it.",
-      "People understand what private or sensitive information should not be entered into AI tools.",
-      "Our team feels comfortable trying AI in low-risk work.",
-      "We already use at least one AI tool in a practical way.",
-      "Leaders support careful AI use and make time for learning.",
+      "Our team understands where AI is useful, risky, and simply wrong.",
+      "We can spot repeated work where AI could save time without raising risk.",
+      "People can write clear prompts instead of hoping the tool figures it out.",
+      "AI-assisted work gets checked before it reaches clients, leaders, or the public.",
+      "People know what private, sensitive, or client information must stay out of AI tools.",
+      "Our team can try AI in low-risk work without creating confusion or rework.",
+      "We already use at least one AI tool in a practical, repeatable way.",
+      "Leaders make time for careful AI learning instead of leaving people to experiment alone.",
     ]),
     nextSteps: [
-      "Run a 60-minute AI basics session using real tasks from the team.",
-      "Pick three low-risk workflows where AI could help with drafting, sorting, or summarizing.",
-      "Create a simple fact-checking habit before AI-assisted work is shared.",
+      "Run a 60-minute AI literacy session using real tasks, weak outputs, and privacy examples from the team.",
+      "Pick three low-risk workflows where AI can help without touching sensitive data.",
+      "Create a review habit so AI-assisted work is checked before it leaves the team.",
     ],
   },
   {
     id: "training",
     title: "AI Training Needs Check",
     description:
-      "Find where your team needs practical training by role, workflow, and confidence level.",
+      "See where training gaps are causing hesitation, inconsistent quality, or wasted time.",
     audience:
-      "For HR, operations, department leads, nonprofits, municipalities, and growing teams.",
+      "For HR, operations, department leads, nonprofits, municipalities, and teams where AI use is uneven.",
     questions: makeQuestions("training", [
-      "People on the team feel confident using AI for simple work tasks.",
-      "Training needs are understood by role, not treated as one-size-fits-all.",
-      "We know which workflow pain points are worth improving first.",
-      "Document, reporting, or policy writing tasks are clear training candidates.",
-      "Communication tasks like emails, updates, and summaries are clear training candidates.",
-      "Meeting tasks like agendas, notes, and follow-ups are clear training candidates.",
-      "Leaders agree on what practical AI adoption should improve first.",
-      "We understand the main barriers that could slow adoption.",
+      "People feel confident using AI for simple work tasks without overtrusting the output.",
+      "Training needs are mapped by role instead of handled as one generic demo.",
+      "We know which workflow pain points are costly enough to improve first.",
+      "Document, reporting, or policy writing tasks have clear training examples.",
+      "Communication tasks like emails, updates, and summaries have safe-use examples.",
+      "Meeting tasks like agendas, notes, and follow-ups have a practical training path.",
+      "Leaders agree on what AI adoption should improve first, not just what tools look interesting.",
+      "We understand the barriers that could slow adoption: confidence, policy, privacy, time, or trust.",
     ]),
     nextSteps: [
-      "Map the top five repeated tasks that drain time across roles.",
-      "Group training by job function so examples feel useful right away.",
-      "Start with one team workshop and one follow-up practice session.",
+      "Map the top five repeated tasks where staff lose time or quality slips.",
+      "Group training by role so examples feel practical on day one.",
+      "Start with one hands-on workshop and a follow-up practice session tied to real work.",
     ],
   },
   {
     id: "policy",
     title: "AI Policy Gap Check",
     description:
-      "Check whether your team has clear safe-use rules before AI use spreads informally.",
+      "Check whether AI use is governed, or whether policy is trailing behind what staff already do.",
     audience:
-      "For leaders, HR, operations, IT, boards, and teams handling client or public information.",
+      "For leaders, HR, operations, IT, boards, and any team handling client, resident, member, or public information.",
     questions: makeQuestions("policy", [
       "We have a clear list of approved AI tools.",
-      "People know the privacy rules for entering data into AI tools.",
-      "We have rules for client, customer, resident, or member data.",
+      "People know what data must never be entered into AI tools.",
+      "We have rules for client, customer, resident, member, or staff data.",
       "Important AI-assisted work requires human review before use.",
-      "People know when AI use should be disclosed.",
+      "People know when AI use should be disclosed to clients, funders, partners, or the public.",
       "We have rules for AI use in hiring, performance, or HR decisions.",
       "Cybersecurity risks are considered before new AI tools are used.",
-      "One person or team clearly owns the AI policy and keeps it current.",
+      "One person or team clearly owns AI policy, questions, approvals, and updates.",
     ]),
     nextSteps: [
-      "Write a one-page safe-use policy covering tools, data, review, and disclosure.",
-      "Name a policy owner who can answer questions and update rules.",
-      "Create a short approval path before teams adopt new AI tools.",
+      "Write a one-page safe-use policy covering tools, data, human review, disclosure, and prohibited uses.",
+      "Name a policy owner who can answer questions before staff make risky judgment calls alone.",
+      "Create a short approval path before teams adopt new AI tools or paste sensitive data into them.",
     ],
   },
 ];
@@ -118,25 +118,25 @@ export const maturityLevels: MaturityLevel[] = [
     name: "AI Unclear",
     range: "0 to 12",
     explanation:
-      "AI is still mostly undefined for your team. Start with basics, safety, and one useful workflow.",
+      "AI is likely happening without enough shared language, training, or guardrails. Start with basic literacy, safe-use rules, and one low-risk workflow before the messy habits harden.",
   },
   {
     name: "AI Curious",
     range: "13 to 24",
     explanation:
-      "Your team sees promise, but needs clearer habits, shared language, and practical training.",
+      "Your team sees the upside, but the habits are uneven. This is where privacy mistakes, weak outputs, and inconsistent staff confidence can quietly become leadership problems.",
   },
   {
     name: "AI Capable",
     range: "25 to 32",
     explanation:
-      "Your team has useful pieces in place. The next move is consistency, role-based practice, and safer rules.",
+      "Your team has useful pieces in place. The next move is consistency: role-based practice, review habits, approved tools, and rules that people can actually follow.",
   },
   {
     name: "AI Multiplier",
     range: "33 to 40",
     explanation:
-      "Your team is ready to turn AI from scattered use into repeatable workflows with clear oversight.",
+      "Your team is ready to turn AI from scattered help into repeatable workflows. Keep the advantage by tightening oversight, measuring time saved, and keeping policy current.",
   },
 ];
 

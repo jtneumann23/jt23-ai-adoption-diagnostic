@@ -71,7 +71,7 @@ async function expectAssessmentResult(
 
   assert.ok(text().includes(`${score}`), `score missing: ${score}`);
   assert.ok(text().includes(level), `level missing: ${level}`);
-  assert.ok(text().includes("Top 3 recommended next steps"));
+  assert.ok(text().includes("Top 3 moves to reduce risk"));
 }
 
 const rootElement = document.getElementById("root");
@@ -81,10 +81,10 @@ await act(async () => {
   createRoot(rootElement).render(<Home />);
 });
 
-assert.ok(text().includes("Turn AI confusion into useful work."));
+assert.ok(text().includes("AI is already in the workflow. Is it under control?"));
 assert.ok(text().includes("JT23 AI Adoption Diagnostic"));
 assert.ok(text().includes("No private data needed."));
-assert.ok(text().includes("Book an AI Readiness Call"));
+assert.ok(text().includes("Book a Readiness Call"));
 
 await expectAssessmentResult("Start AI Literacy Check", 1, 8, "AI Unclear");
 await expectAssessmentResult("Start AI Training Needs Check", 3, 24, "AI Curious");
@@ -92,7 +92,7 @@ await expectAssessmentResult("Start AI Policy Gap Check", 4, 32, "AI Capable");
 await expectAssessmentResult("Start AI Literacy Check", 5, 40, "AI Multiplier");
 
 const bookingLinks = [...document.querySelectorAll("a")].filter((anchor) =>
-  anchor.textContent?.includes("Book an AI Adoption Call"),
+  anchor.textContent?.includes("Book a Readiness Call"),
 ) as HTMLAnchorElement[];
 
 assert.ok(bookingLinks.length > 0);

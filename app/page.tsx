@@ -79,11 +79,16 @@ export default function Home() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-8 max-w-3xl">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--jt23-green)]">
-              Start with the clearest gap
+              Find the weak spot first
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-              Three practical checks. No private data needed.
+              Three checks for the places AI risk usually hides.
             </h2>
+            <p className="mt-4 leading-7 text-[var(--muted)]">
+              Use these checks to see whether your team needs literacy training,
+              workflow practice, policy support, or all three. No private data
+              needed.
+            </p>
           </div>
 
           <div className="grid gap-4 lg:grid-cols-3">
@@ -125,8 +130,9 @@ export default function Home() {
               {activeAssessment.title}
             </h2>
             <p className="mt-4 leading-7 text-[var(--muted)]">
-              Answer eight questions. Choose the option that best describes the
-              team today, not the team you hope to have later.
+              Answer eight questions honestly. Choose the option that describes
+              the team today, especially where the current habit would be hard
+              to defend in front of a client, board, or funder.
             </p>
             <div className="mt-6 border border-[var(--line)] bg-[var(--panel-soft)] p-5">
               <p className="text-sm font-bold text-white">
@@ -163,7 +169,7 @@ export default function Home() {
                     return (
                       <button
                         aria-pressed={selected}
-                        className={`min-h-16 border px-3 py-3 text-left text-sm font-bold transition ${
+                        className={`group flex min-h-12 items-center gap-2 border px-3 py-2 text-left text-sm font-bold transition hover:-translate-y-0.5 ${
                           selected
                             ? "border-[var(--jt23-green)] bg-[var(--jt23-green)] text-black"
                             : "border-[var(--line)] bg-black text-white hover:border-[var(--jt23-green)]"
@@ -172,10 +178,16 @@ export default function Home() {
                         onClick={() => answerQuestion(question.id, option.value)}
                         type="button"
                       >
-                        <span className="block font-mono text-xs">
+                        <span
+                          className={`grid h-6 w-6 shrink-0 place-items-center border font-mono text-xs ${
+                            selected
+                              ? "border-black"
+                              : "border-[var(--line)] text-[var(--jt23-green)] group-hover:border-[var(--jt23-green)]"
+                          }`}
+                        >
                           {option.value}
                         </span>
-                        {option.label}
+                        <span className="leading-tight">{option.label}</span>
                       </button>
                     );
                   })}
@@ -185,8 +197,8 @@ export default function Home() {
 
             <div className="flex flex-col gap-3 border border-[var(--line)] bg-[var(--panel-soft)] p-5 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm leading-6 text-[var(--muted)]">
-                Scores are a guide for the next practical conversation, not a
-                grade.
+                Scores are not a grade. They are a pressure map for the next
+                practical decision.
               </p>
               <button
                 className="border border-[var(--jt23-green)] bg-[var(--jt23-green)] px-5 py-3 text-sm font-bold text-black transition enabled:hover:bg-white disabled:cursor-not-allowed disabled:border-[var(--line)] disabled:bg-[#253026] disabled:text-[var(--muted)]"
@@ -237,7 +249,7 @@ export default function Home() {
 
               <div className="border border-[var(--line)] bg-[var(--background)] p-6">
                 <h3 className="text-2xl font-bold">
-                  Top 3 recommended next steps
+                  Top 3 moves to reduce risk
                 </h3>
                 <ol className="mt-5 space-y-4">
                   {result.assessment.nextSteps.map((step, index) => (
@@ -258,7 +270,7 @@ export default function Home() {
                   className="mt-7 inline-flex w-full justify-center border border-[var(--jt23-green)] bg-[var(--jt23-green)] px-5 py-3 text-sm font-bold text-black transition hover:bg-white sm:w-auto"
                   href={bookingLink}
                 >
-                  Book an AI Adoption Call
+                  Book a Readiness Call
                 </a>
               </div>
             </div>
@@ -269,7 +281,7 @@ export default function Home() {
               </h2>
               <p className="mt-3 max-w-2xl leading-7 text-[var(--muted)]">
                 Your results will show the total score, maturity level, plain
-                English explanation, and three next steps.
+                English risk read, and three next moves.
               </p>
             </div>
           )}
@@ -311,24 +323,24 @@ function Hero() {
               JT23 AI Adoption Diagnostic
             </p>
             <h1 className="mt-5 max-w-4xl text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              Turn AI confusion into useful work.
+              AI is already in the workflow. Is it under control?
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">
-              JT23 Impact Labs helps teams understand AI, use it safely, and
-              find practical workflows that save time.
+              JT23 helps teams turn scattered AI experiments into safer habits,
+              clearer policy, and practical workflows people can actually use.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
                 className="inline-flex justify-center border border-[var(--jt23-green)] bg-[var(--jt23-green)] px-5 py-3 text-sm font-bold text-black transition hover:bg-white"
                 href="#diagnostics"
               >
-                Start the AI Adoption Diagnostic
+                Check Your AI Risk
               </a>
               <a
                 className="inline-flex justify-center border border-[var(--line)] px-5 py-3 text-sm font-bold text-white transition hover:border-[var(--jt23-green)]"
                 href={bookingLink}
               >
-                Book an AI Readiness Call
+                Book a Readiness Call
               </a>
             </div>
           </div>
@@ -336,17 +348,17 @@ function Hero() {
           <div className="border border-[var(--line)] bg-[var(--panel)] p-6">
             <div className="border-b border-[var(--line)] pb-4">
               <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--jt23-green)]">
-                V1 diagnostic
+                Readiness snapshot
               </p>
               <h2 className="mt-3 text-3xl font-black tracking-tight">
-                A clear read on where your team stands.
+                The problem is not AI use. It is unmanaged AI use.
               </h2>
             </div>
             <div className="divide-y divide-[var(--line)]">
               {[
-                ["AI Literacy", "Can people use AI with judgment?"],
-                ["Training Needs", "Where would practical training help first?"],
-                ["Policy Gaps", "Are safe-use rules clear enough?"],
+                ["AI Literacy", "Can people spot bad outputs before they travel?"],
+                ["Training Needs", "Where is uneven skill costing time or trust?"],
+                ["Policy Gaps", "What rules are missing before sensitive data is exposed?"],
               ].map(([label, detail]) => (
                 <div className="grid grid-cols-[1.6rem_1fr] gap-4 py-5" key={label}>
                   <span className="mt-1 h-3 w-3 bg-[var(--jt23-green)]" />
@@ -360,8 +372,8 @@ function Hero() {
               ))}
             </div>
             <div className="mt-2 border border-[var(--jt23-green)] p-4 text-sm leading-6 text-white">
-              No names, emails, client data, or company details are collected in
-              this first version.
+              No names, emails, client data, or company details are collected.
+              This is a quick pressure test, not a surveillance tool.
             </div>
           </div>
         </div>
@@ -376,18 +388,19 @@ function CallToAction() {
       <div className="mx-auto grid max-w-6xl gap-6 border border-[var(--jt23-green)] bg-[var(--jt23-green)] p-6 text-black sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
           <h2 className="text-3xl font-black tracking-tight">
-            Want help turning the score into action?
+            Do not let the policy arrive after the problem.
           </h2>
           <p className="mt-3 max-w-3xl leading-7">
-            JT23 can help your team build AI literacy, create safe-use rules,
-            and map the first workflows worth improving.
+            JT23 can help your team run the workshop, write the safe-use rules,
+            and choose the first workflows worth improving before scattered AI
+            use becomes a bigger risk.
           </p>
         </div>
         <a
           className="inline-flex justify-center border border-black bg-black px-5 py-3 text-sm font-bold text-white transition hover:bg-white hover:text-black"
           href={bookingLink}
         >
-          Book an AI Adoption Call
+          Book a Readiness Call
         </a>
       </div>
     </section>
@@ -403,8 +416,9 @@ function About() {
         </p>
         <p className="max-w-3xl text-xl leading-9 text-white">
           JT23 Impact Labs helps teams use AI in practical, safe, and human
-          ways. We focus on clear training, useful workflows, and plain-English
-          policy support so teams can move from curiosity to confidence.
+          ways. We focus on plain-English training, useful workflows, and
+          safe-use policy support so teams can move faster without pretending
+          the risks are small.
         </p>
       </div>
     </section>
