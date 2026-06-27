@@ -8,6 +8,9 @@
   --panel-soft: #131a15;
   --line: #233226;
   --muted: #b9c5bb;
+  --snapshot-literacy: #8fb996;
+  --snapshot-policy: #d6b25e;
+  --snapshot-risk: #d97878;
 }
 
 @theme inline {

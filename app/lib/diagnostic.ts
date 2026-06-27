@@ -46,69 +46,69 @@ export const assessments: Assessment[] = [
     id: "literacy",
     title: "AI Literacy Check",
     description:
-      "Find out whether your team can use AI with judgment, or whether people are guessing their way through it.",
+      "See whether your team knows when to use AI, when not to use it, and what still needs human judgment.",
     audience:
-      "For owners, managers, and teams who need shared language before AI habits spread unevenly.",
+      "For owners, managers, nonprofit leaders, public-sector teams, and staff who need shared AI habits before tool use spreads unevenly.",
     questions: makeQuestions("literacy", [
-      "Our team understands where AI is useful, risky, and simply wrong.",
-      "We can spot repeated work where AI could save time without raising risk.",
-      "People can write clear prompts instead of hoping the tool figures it out.",
-      "AI-assisted work gets checked before it reaches clients, leaders, or the public.",
-      "People know what private, sensitive, or client information must stay out of AI tools.",
-      "Our team can try AI in low-risk work without creating confusion or rework.",
-      "We already use at least one AI tool in a practical, repeatable way.",
-      "Leaders make time for careful AI learning instead of leaving people to experiment alone.",
+      "People understand when AI is useful, when it is risky, and when the work should stay human.",
+      "Staff can choose the right tool or agent for the task instead of using one chatbot for everything.",
+      "People can write clear prompts, add context, and ask for better outputs without overtrusting the answer.",
+      "AI-assisted work is checked by a person before it reaches clients, funders, leaders, residents, or the public.",
+      "People know what private, confidential, client, staff, or community data must stay out of AI tools.",
+      "The team knows the difference between beginner, intermediate, and advanced AI use in daily work.",
+      "Leaders make time for hands-on practice instead of leaving staff to experiment alone.",
+      "AI use is tied to real workflow problems, not just curiosity about new tools.",
     ]),
     nextSteps: [
-      "Run a 60-minute AI literacy session using real tasks, weak outputs, and privacy examples from the team.",
-      "Pick three low-risk workflows where AI can help without touching sensitive data.",
-      "Create a review habit so AI-assisted work is checked before it leaves the team.",
-    ],
-  },
-  {
-    id: "training",
-    title: "AI Training Needs Check",
-    description:
-      "See where training gaps are causing hesitation, inconsistent quality, or wasted time.",
-    audience:
-      "For HR, operations, department leads, nonprofits, municipalities, and teams where AI use is uneven.",
-    questions: makeQuestions("training", [
-      "People feel confident using AI for simple work tasks without overtrusting the output.",
-      "Training needs are mapped by role instead of handled as one generic demo.",
-      "We know which workflow pain points are costly enough to improve first.",
-      "Document, reporting, or policy writing tasks have clear training examples.",
-      "Communication tasks like emails, updates, and summaries have safe-use examples.",
-      "Meeting tasks like agendas, notes, and follow-ups have a practical training path.",
-      "Leaders agree on what AI adoption should improve first, not just what tools look interesting.",
-      "We understand the barriers that could slow adoption: confidence, policy, privacy, time, or trust.",
-    ]),
-    nextSteps: [
-      "Map the top five repeated tasks where staff lose time or quality slips.",
-      "Group training by role so examples feel practical on day one.",
-      "Start with one hands-on workshop and a follow-up practice session tied to real work.",
+      "Run a practical AI literacy session using real tasks, weak outputs, privacy examples, and human-review decisions.",
+      "Create a simple guide for when to use AI, when not to use AI, and what work must stay human.",
+      "Pick two low-risk workflows where staff can practice safely before moving into more sensitive work.",
     ],
   },
   {
     id: "policy",
-    title: "AI Policy Gap Check",
+    title: "AI Policy Check",
     description:
-      "Check whether AI use is governed, or whether policy is trailing behind what staff already do.",
+      "Check whether your AI rules match what people are already doing with tools, data, and client-facing work.",
     audience:
-      "For leaders, HR, operations, IT, boards, and any team handling client, resident, member, or public information.",
+      "For business owners, nonprofit executives, municipal leaders, operations teams, boards, HR, and IT leads who need clear rules people can follow.",
     questions: makeQuestions("policy", [
-      "We have a clear list of approved AI tools.",
-      "People know what data must never be entered into AI tools.",
-      "We have rules for client, customer, resident, member, or staff data.",
-      "Important AI-assisted work requires human review before use.",
-      "People know when AI use should be disclosed to clients, funders, partners, or the public.",
-      "We have rules for AI use in hiring, performance, or HR decisions.",
-      "Cybersecurity risks are considered before new AI tools are used.",
-      "One person or team clearly owns AI policy, questions, approvals, and updates.",
+      "We have a clear list of approved AI tools and what each one is allowed to be used for.",
+      "People know what information is public, internal, confidential, or prohibited before they use AI.",
+      "Our policy explains how to handle client, customer, resident, member, staff, or community information.",
+      "AI rules reflect regulatory and public-sector requirements that apply to our organization.",
+      "There is a clear approval path before teams adopt a new AI tool or connect AI to internal systems.",
+      "People know when AI use should be disclosed to clients, funders, partners, boards, or the public.",
+      "One person or team owns AI policy questions, updates, exceptions, and training reminders.",
+      "Our policy covers cost discipline, tool sprawl, and the risk of paying for tools that do not improve work.",
     ]),
     nextSteps: [
-      "Write a one-page safe-use policy covering tools, data, human review, disclosure, and prohibited uses.",
-      "Name a policy owner who can answer questions before staff make risky judgment calls alone.",
-      "Create a short approval path before teams adopt new AI tools or paste sensitive data into them.",
+      "Write a one-page safe-use policy covering approved tools, data rules, human review, disclosure, and prohibited uses.",
+      "Create a simple approval path for new AI tools so shadow AI does not become the default policy.",
+      "Assign a policy owner who can answer questions and keep rules current as tools and requirements change.",
+    ],
+  },
+  {
+    id: "risk",
+    title: "AI Risk Check",
+    description:
+      "Find where uncontrolled AI use could expose data, weaken decisions, create compliance issues, or damage trust.",
+    audience:
+      "For any team handling client, customer, resident, member, staff, financial, operational, or public information.",
+    questions: makeQuestions("risk", [
+      "We know where staff are already using AI, including unofficial tools, browser extensions, and personal accounts.",
+      "Data security and privacy risks are reviewed before AI is used with documents, records, emails, or internal files.",
+      "People know which decisions should not be delegated to AI, especially hiring, performance, legal, financial, or client-impacting decisions.",
+      "Important outputs are checked for accuracy, bias, missing context, and tone before they are used.",
+      "We have boundaries for AI-generated content that could reach clients, residents, funders, boards, or the public.",
+      "Tool access is managed so staff are not pasting sensitive information into whatever app is easiest.",
+      "Leaders understand the risks of shadow AI, ignored policy, inconsistent tools, and unclear accountability.",
+      "AI use is reviewed against business value, staff time, quality, safety, and maintainable process change.",
+    ]),
+    nextSteps: [
+      "Run a quick AI risk inventory: tools in use, data touched, work affected, owners, and review habits.",
+      "Set immediate red lines for confidential data, client/community impact, HR decisions, and public-facing outputs.",
+      "Build a review rhythm so leaders can see whether AI is reducing risk and improving work instead of creating hidden exposure.",
     ],
   },
 ];
@@ -118,25 +118,25 @@ export const maturityLevels: MaturityLevel[] = [
     name: "AI Unclear",
     range: "0 to 12",
     explanation:
-      "AI is likely happening without enough shared language, training, or guardrails. Start with basic literacy, safe-use rules, and one low-risk workflow before the messy habits harden.",
+      "AI is likely happening without enough shared language, safe-use rules, or leadership visibility. Start with basic literacy, clear boundaries, and one low-risk workflow before messy habits harden.",
   },
   {
     name: "AI Curious",
     range: "13 to 24",
     explanation:
-      "Your team sees the upside, but the habits are uneven. This is where privacy mistakes, weak outputs, and inconsistent staff confidence can quietly become leadership problems.",
+      "Your team sees the upside, but habits are uneven. This is where privacy mistakes, weak outputs, shadow tools, and inconsistent confidence can quietly become leadership problems.",
   },
   {
     name: "AI Capable",
     range: "25 to 32",
     explanation:
-      "Your team has useful pieces in place. The next move is consistency: role-based practice, review habits, approved tools, and rules that people can actually follow.",
+      "Your team has useful pieces in place. The next move is consistency: practical training, approved tools, review habits, and rules people can actually follow.",
   },
   {
     name: "AI Multiplier",
     range: "33 to 40",
     explanation:
-      "Your team is ready to turn AI from scattered help into repeatable workflows. Keep the advantage by tightening oversight, measuring time saved, and keeping policy current.",
+      "Your team is ready to turn AI from scattered help into safer, repeatable workflows. Keep the advantage by tightening oversight, measuring value, and keeping policy current.",
   },
 ];
 

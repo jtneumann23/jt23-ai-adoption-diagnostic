@@ -8,6 +8,10 @@ import {
 
 test("each assessment has eight five-point questions", () => {
   assert.equal(assessments.length, 3);
+  assert.deepEqual(
+    assessments.map((assessment) => assessment.id),
+    ["literacy", "policy", "risk"],
+  );
 
   for (const assessment of assessments) {
     assert.equal(assessment.questions.length, 8, assessment.title);

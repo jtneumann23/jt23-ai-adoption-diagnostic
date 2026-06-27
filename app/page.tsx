@@ -85,9 +85,9 @@ export default function Home() {
               Three checks for the places AI risk usually hides.
             </h2>
             <p className="mt-4 leading-7 text-[var(--muted)]">
-              Use these checks to see whether your team needs literacy training,
-              workflow practice, policy support, or all three. No private data
-              needed.
+              Use these checks to see whether your team needs stronger AI
+              habits, clearer policy, better risk controls, or all three. No
+              private data needed.
             </p>
           </div>
 
@@ -356,12 +356,27 @@ function Hero() {
             </div>
             <div className="divide-y divide-[var(--line)]">
               {[
-                ["AI Literacy", "Can people spot bad outputs before they travel?"],
-                ["Training Needs", "Where is uneven skill costing time or trust?"],
-                ["Policy Gaps", "What rules are missing before sensitive data is exposed?"],
-              ].map(([label, detail]) => (
+                {
+                  color: "var(--snapshot-literacy)",
+                  detail: "Can people choose the right tool and spot bad outputs?",
+                  label: "AI Literacy",
+                },
+                {
+                  color: "var(--snapshot-policy)",
+                  detail: "Are the rules clear enough for staff to actually follow?",
+                  label: "AI Policy",
+                },
+                {
+                  color: "var(--snapshot-risk)",
+                  detail: "Where could data, trust, or compliance exposure build up?",
+                  label: "AI Risk",
+                },
+              ].map(({ color, detail, label }) => (
                 <div className="grid grid-cols-[1.6rem_1fr] gap-4 py-5" key={label}>
-                  <span className="mt-1 h-3 w-3 bg-[var(--jt23-green)]" />
+                  <span
+                    className="mt-1 h-3 w-3"
+                    style={{ backgroundColor: color }}
+                  />
                   <div>
                     <p className="font-bold text-white">{label}</p>
                     <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
