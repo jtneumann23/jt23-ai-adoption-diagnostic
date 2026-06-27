@@ -11,7 +11,7 @@ import {
   scoreAssessment,
 } from "./lib/diagnostic";
 
-const bookingLink = "https://example.com/book";
+const bookingLink = "https://calendly.com/jtneumann23/jon-neumann-1x1";
 
 export default function Home() {
   const [activeAssessmentId, setActiveAssessmentId] = useState(

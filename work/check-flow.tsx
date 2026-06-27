@@ -96,7 +96,10 @@ const bookingLinks = [...document.querySelectorAll("a")].filter((anchor) =>
 ) as HTMLAnchorElement[];
 
 assert.ok(bookingLinks.length > 0);
-assert.equal(bookingLinks[0].href, "https://example.com/book");
+assert.equal(
+  bookingLinks[0].href,
+  "https://calendly.com/jtneumann23/jon-neumann-1x1",
+);
 
 for (const bannedWord of ["revolutionary", "synergy", "cutting-edge", "unlock the power"]) {
   assert.equal(text().toLowerCase().includes(bannedWord), false);
