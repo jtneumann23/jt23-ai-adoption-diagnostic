@@ -151,27 +151,6 @@ export default function Home() {
           </aside>
 
           <div className="space-y-5">
-            <div className="border-2 border-[var(--line)] bg-[var(--panel-soft)] p-5">
-              <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--jt23-green)]">
-                Answer key
-              </p>
-              <div className="mt-4 grid gap-2 sm:grid-cols-5">
-                {activeAssessment.questions[0]?.options.map((option) => (
-                  <div
-                    className="border-2 border-[var(--line)] bg-black p-3"
-                    key={option.value}
-                  >
-                    <p className="font-mono text-sm font-bold text-[var(--jt23-green)]">
-                      {option.value}
-                    </p>
-                    <p className="mt-1 text-sm font-bold leading-tight text-white">
-                      {option.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {activeAssessment.questions.map((question, questionIndex) => (
               <div
                 aria-labelledby={`${question.id}-prompt`}
@@ -188,35 +167,31 @@ export default function Home() {
                   </span>
                   <span>{question.prompt}</span>
                 </h3>
-                <div className="grid gap-2 sm:grid-cols-5">
+                <div className="grid gap-3 sm:grid-cols-5">
                   {question.options.map((option) => {
                     const selected = activeAnswers[question.id] === option.value;
 
                     return (
-                      <button
-                        aria-pressed={selected}
-                        className={`group flex min-h-[5.25rem] flex-col items-start justify-between gap-2 border-2 bg-black px-3 py-3 text-left text-sm font-bold text-white transition hover:-translate-y-0.5 ${
-                          selected
-                            ? "border-[var(--jt23-green)] shadow-[0_0_0_1px_var(--jt23-green)]"
-                            : "border-[var(--line)] hover:border-[var(--jt23-green)]"
-                        }`}
-                        key={option.value}
-                        onClick={() => answerQuestion(question.id, option.value)}
-                        type="button"
-                      >
-                        <span
-                          className={`grid h-6 w-6 shrink-0 place-items-center border font-mono text-xs ${
+                      <div className="flex min-w-0 flex-col gap-2" key={option.value}>
+                        <p className="min-h-[2.5rem] text-sm font-bold leading-tight text-white sm:min-h-[3.5rem]">
+                          {option.label}
+                        </p>
+                        <button
+                          aria-label={`${option.value}: ${option.label}`}
+                          aria-pressed={selected}
+                          className={`group grid min-h-[4.5rem] place-items-center border-2 border-[var(--jt23-green)] bg-black px-3 py-3 text-center font-mono text-lg font-bold text-[var(--jt23-green)] transition hover:-translate-y-0.5 hover:bg-[#071108] ${
                             selected
-                              ? "border-[var(--jt23-green)] text-[var(--jt23-green)]"
-                              : "border-[var(--line)] text-[var(--jt23-green)] group-hover:border-[var(--jt23-green)]"
+                              ? "shadow-[0_0_0_2px_var(--jt23-green),0_0_24px_rgba(24,210,63,0.28)]"
+                              : "shadow-[0_0_0_1px_rgba(24,210,63,0.18)]"
                           }`}
+                          onClick={() =>
+                            answerQuestion(question.id, option.value)
+                          }
+                          type="button"
                         >
                           {option.value}
-                        </span>
-                        <span className="w-full break-words leading-tight">
-                          {option.label}
-                        </span>
-                      </button>
+                        </button>
+                      </div>
                     );
                   })}
                 </div>

@@ -85,7 +85,7 @@ assert.ok(text().includes("AI is already in the workflow. Is it under control?")
 assert.ok(text().includes("JT23 AI Adoption Diagnostic"));
 assert.ok(text().includes("No private data needed."));
 assert.ok(text().includes("Book a Readiness Call"));
-assert.ok(text().includes("Answer key"));
+assert.equal(text().includes("Answer key"), false);
 assert.ok(text().includes("Not on our radar"));
 assert.ok(text().includes("Goals achieved"));
 
