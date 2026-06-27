@@ -27,11 +27,11 @@ export type MaturityLevel = {
 };
 
 const scaleOptions: Question["options"] = [
-  { value: 1, label: "Not ready" },
-  { value: 2, label: "Patchy" },
-  { value: 3, label: "Some traction" },
-  { value: 4, label: "Working" },
-  { value: 5, label: "Clear habit" },
+  { value: 1, label: "Not on our radar" },
+  { value: 2, label: "Little progress" },
+  { value: 3, label: "Gaining traction" },
+  { value: 4, label: "Working toward goals" },
+  { value: 5, label: "Goals achieved" },
 ];
 
 const makeQuestions = (prefix: string, prompts: string[]): Question[] =>

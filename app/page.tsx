@@ -151,6 +151,27 @@ export default function Home() {
           </aside>
 
           <div className="space-y-5">
+            <div className="border border-[var(--line)] bg-[var(--panel-soft)] p-5">
+              <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--jt23-green)]">
+                Answer key
+              </p>
+              <div className="mt-4 grid gap-2 sm:grid-cols-5">
+                {activeAssessment.questions[0]?.options.map((option) => (
+                  <div
+                    className="border border-[var(--line)] bg-black p-3"
+                    key={option.value}
+                  >
+                    <p className="font-mono text-sm font-bold text-[var(--jt23-green)]">
+                      {option.value}
+                    </p>
+                    <p className="mt-1 text-sm font-bold leading-tight text-white">
+                      {option.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {activeAssessment.questions.map((question, questionIndex) => (
               <fieldset
                 className="border border-[var(--line)] bg-[var(--panel)] p-5"

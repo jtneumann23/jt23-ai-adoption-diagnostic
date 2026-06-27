@@ -85,6 +85,9 @@ assert.ok(text().includes("AI is already in the workflow. Is it under control?")
 assert.ok(text().includes("JT23 AI Adoption Diagnostic"));
 assert.ok(text().includes("No private data needed."));
 assert.ok(text().includes("Book a Readiness Call"));
+assert.ok(text().includes("Answer key"));
+assert.ok(text().includes("Not on our radar"));
+assert.ok(text().includes("Goals achieved"));
 
 await expectAssessmentResult("Start AI Literacy Check", 1, 8, "AI Unclear");
 await expectAssessmentResult("Start AI Policy Check", 3, 24, "AI Curious");

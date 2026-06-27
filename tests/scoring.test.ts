@@ -23,6 +23,17 @@ test("each assessment has eight five-point questions", () => {
         [1, 2, 3, 4, 5],
         question.prompt,
       );
+      assert.deepEqual(
+        question.options.map((option) => option.label),
+        [
+          "Not on our radar",
+          "Little progress",
+          "Gaining traction",
+          "Working toward goals",
+          "Goals achieved",
+        ],
+        question.prompt,
+      );
     }
   }
 });
