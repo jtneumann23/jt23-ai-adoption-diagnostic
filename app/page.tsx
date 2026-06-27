@@ -151,14 +151,14 @@ export default function Home() {
           </aside>
 
           <div className="space-y-5">
-            <div className="border border-[var(--line)] bg-[var(--panel-soft)] p-5">
+            <div className="border-2 border-[var(--line)] bg-[var(--panel-soft)] p-5">
               <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--jt23-green)]">
                 Answer key
               </p>
               <div className="mt-4 grid gap-2 sm:grid-cols-5">
                 {activeAssessment.questions[0]?.options.map((option) => (
                   <div
-                    className="border border-[var(--line)] bg-black p-3"
+                    className="border-2 border-[var(--line)] bg-black p-3"
                     key={option.value}
                   >
                     <p className="font-mono text-sm font-bold text-[var(--jt23-green)]">
@@ -173,16 +173,21 @@ export default function Home() {
             </div>
 
             {activeAssessment.questions.map((question, questionIndex) => (
-              <fieldset
-                className="border border-[var(--line)] bg-[var(--panel)] p-5"
+              <div
+                aria-labelledby={`${question.id}-prompt`}
+                className="border-2 border-[var(--line)] bg-[var(--panel)] p-5"
                 key={question.id}
+                role="group"
               >
-                <legend className="mb-4 text-base font-bold">
+                <h3
+                  className="mb-4 flex gap-3 text-base font-bold leading-7 text-white"
+                  id={`${question.id}-prompt`}
+                >
                   <span className="mr-3 font-mono text-sm text-[var(--jt23-green)]">
                     {String(questionIndex + 1).padStart(2, "0")}
                   </span>
-                  {question.prompt}
-                </legend>
+                  <span>{question.prompt}</span>
+                </h3>
                 <div className="grid gap-2 sm:grid-cols-5">
                   {question.options.map((option) => {
                     const selected = activeAnswers[question.id] === option.value;
@@ -190,10 +195,10 @@ export default function Home() {
                     return (
                       <button
                         aria-pressed={selected}
-                        className={`group flex min-h-12 items-center gap-2 border px-3 py-2 text-left text-sm font-bold transition hover:-translate-y-0.5 ${
+                        className={`group flex min-h-[5.25rem] flex-col items-start justify-between gap-2 border-2 bg-black px-3 py-3 text-left text-sm font-bold text-white transition hover:-translate-y-0.5 ${
                           selected
-                            ? "border-[var(--jt23-green)] bg-[var(--jt23-green)] text-black"
-                            : "border-[var(--line)] bg-black text-white hover:border-[var(--jt23-green)]"
+                            ? "border-[var(--jt23-green)] shadow-[0_0_0_1px_var(--jt23-green)]"
+                            : "border-[var(--line)] hover:border-[var(--jt23-green)]"
                         }`}
                         key={option.value}
                         onClick={() => answerQuestion(question.id, option.value)}
@@ -202,18 +207,20 @@ export default function Home() {
                         <span
                           className={`grid h-6 w-6 shrink-0 place-items-center border font-mono text-xs ${
                             selected
-                              ? "border-black"
+                              ? "border-[var(--jt23-green)] text-[var(--jt23-green)]"
                               : "border-[var(--line)] text-[var(--jt23-green)] group-hover:border-[var(--jt23-green)]"
                           }`}
                         >
                           {option.value}
                         </span>
-                        <span className="leading-tight">{option.label}</span>
+                        <span className="w-full break-words leading-tight">
+                          {option.label}
+                        </span>
                       </button>
                     );
                   })}
                 </div>
-              </fieldset>
+              </div>
             ))}
 
             <div className="flex flex-col gap-3 border border-[var(--line)] bg-[var(--panel-soft)] p-5 sm:flex-row sm:items-center sm:justify-between">

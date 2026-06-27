@@ -45,11 +45,11 @@ async function click(element: Element) {
 }
 
 async function answerAll(value: 1 | 2 | 3 | 4 | 5) {
-  const fieldsets = [...document.querySelectorAll("fieldset")];
-  assert.equal(fieldsets.length, 8);
+  const questionGroups = [...document.querySelectorAll('[role="group"]')];
+  assert.equal(questionGroups.length, 8);
 
-  for (const fieldset of fieldsets) {
-    const option = [...fieldset.querySelectorAll("button")].find((button) =>
+  for (const group of questionGroups) {
+    const option = [...group.querySelectorAll("button")].find((button) =>
       button.textContent?.trim().startsWith(String(value)),
     );
     assert.ok(option, `option ${value} not found`);
