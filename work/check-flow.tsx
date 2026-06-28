@@ -57,6 +57,45 @@ async function answerAll(value: 1 | 2 | 3 | 4 | 5) {
   }
 }
 
+async function selectFirstVisibleOption(value: 1 | 2 | 3 | 4 | 5) {
+  const firstQuestion = document.querySelector('[role="group"]');
+  assert.ok(firstQuestion);
+
+  const option = [...firstQuestion.querySelectorAll("button")].find((button) =>
+    button.textContent?.trim().startsWith(String(value)),
+  );
+  assert.ok(option, `option ${value} not found`);
+  await click(option);
+
+  return option;
+}
+
+async function expectVisualSelectionState() {
+  const selectedOption = await selectFirstVisibleOption(3);
+  assert.equal(selectedOption.getAttribute("aria-pressed"), "true");
+  assert.ok(
+    selectedOption.className.includes("bg-[#071f0d]"),
+    "selected answer should light up the full answer tile",
+  );
+  assert.ok(
+    selectedOption.className.includes("shadow-[inset_0_0_0_1px_var(--jt23-green)"),
+    "selected answer should have a visible neon green glow",
+  );
+
+  await answerAll(3);
+  const showResultsButton = buttonByText("Show results");
+  assert.equal(showResultsButton.hasAttribute("disabled"), false);
+  assert.equal(
+    showResultsButton.className.includes("bg-[var(--jt23-green)]"),
+    false,
+    "Show results should avoid the filled light-green style",
+  );
+  assert.ok(
+    showResultsButton.className.includes("shadow-[0_0_24px_rgba(24,210,63,0.36)]"),
+    "Show results should use a neon green treatment",
+  );
+}
+
 async function expectAssessmentResult(
   startButton: string,
   answerValue: 1 | 2 | 3 | 4 | 5,
@@ -89,6 +128,7 @@ assert.equal(text().includes("Answer key"), false);
 assert.ok(text().includes("Not on our radar"));
 assert.ok(text().includes("Goals achieved"));
 
+await expectVisualSelectionState();
 await expectAssessmentResult("Start AI Literacy Check", 1, 8, "AI Unclear");
 await expectAssessmentResult("Start AI Policy Check", 3, 24, "AI Curious");
 await expectAssessmentResult("Start AI Risk Check", 4, 32, "AI Capable");

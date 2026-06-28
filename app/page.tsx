@@ -172,26 +172,27 @@ export default function Home() {
                     const selected = activeAnswers[question.id] === option.value;
 
                     return (
-                      <div className="flex min-w-0 flex-col gap-2" key={option.value}>
-                        <p className="min-h-[2.5rem] text-sm font-bold leading-tight text-white sm:min-h-[3.5rem]">
-                          {option.label}
-                        </p>
-                        <button
-                          aria-label={`${option.value}: ${option.label}`}
-                          aria-pressed={selected}
-                          className={`group grid min-h-[4.5rem] place-items-center border-2 border-[var(--jt23-green)] bg-black px-3 py-3 text-center font-mono text-lg font-bold text-[var(--jt23-green)] transition hover:-translate-y-0.5 hover:bg-[#071108] ${
-                            selected
-                              ? "shadow-[0_0_0_2px_var(--jt23-green),0_0_24px_rgba(24,210,63,0.28)]"
-                              : "shadow-[0_0_0_1px_rgba(24,210,63,0.18)]"
-                          }`}
-                          onClick={() =>
-                            answerQuestion(question.id, option.value)
-                          }
-                          type="button"
-                        >
+                      <button
+                        aria-label={`${option.value}: ${option.label}`}
+                        aria-pressed={selected}
+                        className={`group flex min-h-[7.25rem] min-w-0 flex-col justify-between border-2 px-4 py-3 text-left transition hover:-translate-y-0.5 ${
+                          selected
+                            ? "border-[var(--jt23-green)] bg-[#071f0d] text-white shadow-[inset_0_0_0_1px_var(--jt23-green),0_0_30px_rgba(24,210,63,0.36)]"
+                            : "border-[var(--line)] bg-black text-white shadow-[0_0_0_1px_rgba(24,210,63,0.12)] hover:border-[var(--jt23-green)] hover:bg-[#071108]"
+                        }`}
+                        key={option.value}
+                        onClick={() =>
+                          answerQuestion(question.id, option.value)
+                        }
+                        type="button"
+                      >
+                        <span className="font-mono text-xl font-black text-[var(--jt23-green)]">
                           {option.value}
-                        </button>
-                      </div>
+                        </span>
+                        <span className="mt-3 text-sm font-bold leading-tight">
+                          {option.label}
+                        </span>
+                      </button>
                     );
                   })}
                 </div>
@@ -204,7 +205,7 @@ export default function Home() {
                 practical decision.
               </p>
               <button
-                className="border border-[var(--jt23-green)] bg-[var(--jt23-green)] px-5 py-3 text-sm font-bold text-black transition enabled:hover:bg-white disabled:cursor-not-allowed disabled:border-[var(--line)] disabled:bg-[#253026] disabled:text-[var(--muted)]"
+                className="border border-[var(--jt23-green)] bg-black px-5 py-3 text-sm font-bold text-[var(--jt23-green)] shadow-[0_0_24px_rgba(24,210,63,0.36)] transition enabled:hover:-translate-y-0.5 enabled:hover:bg-[#071f0d] enabled:hover:text-white disabled:cursor-not-allowed disabled:border-[var(--line)] disabled:bg-black disabled:text-[var(--muted)] disabled:shadow-none"
                 disabled={!isComplete}
                 onClick={showResult}
                 type="button"
