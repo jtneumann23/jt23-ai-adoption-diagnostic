@@ -177,7 +177,7 @@ export default function Home() {
                         aria-pressed={selected}
                         className={`group flex min-h-[7.25rem] min-w-0 flex-col justify-between border-2 px-4 py-3 text-left transition hover:-translate-y-0.5 ${
                           selected
-                            ? "border-[var(--jt23-green)] bg-[#071f0d] text-white shadow-[inset_0_0_0_1px_var(--jt23-green),0_0_30px_rgba(24,210,63,0.36)]"
+                            ? "border-[var(--jt23-green)] bg-[var(--jt23-green)] text-black shadow-[0_0_32px_rgba(24,210,63,0.58),inset_0_0_20px_rgba(255,255,255,0.18)]"
                             : "border-[var(--line)] bg-black text-white shadow-[0_0_0_1px_rgba(24,210,63,0.12)] hover:border-[var(--jt23-green)] hover:bg-[#071108]"
                         }`}
                         key={option.value}
@@ -186,7 +186,11 @@ export default function Home() {
                         }
                         type="button"
                       >
-                        <span className="font-mono text-xl font-black text-[var(--jt23-green)]">
+                        <span
+                          className={`font-mono text-xl font-black ${
+                            selected ? "text-black" : "text-[var(--jt23-green)]"
+                          }`}
+                        >
                           {option.value}
                         </span>
                         <span className="mt-3 text-sm font-bold leading-tight">

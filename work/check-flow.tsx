@@ -74,11 +74,11 @@ async function expectVisualSelectionState() {
   const selectedOption = await selectFirstVisibleOption(3);
   assert.equal(selectedOption.getAttribute("aria-pressed"), "true");
   assert.ok(
-    selectedOption.className.includes("bg-[#071f0d]"),
-    "selected answer should light up the full answer tile",
+    selectedOption.className.includes("bg-[var(--jt23-green)]"),
+    "selected answer should fill the full answer tile with neon green",
   );
   assert.ok(
-    selectedOption.className.includes("shadow-[inset_0_0_0_1px_var(--jt23-green)"),
+    selectedOption.className.includes("0_0_32px_rgba(24,210,63,0.58)"),
     "selected answer should have a visible neon green glow",
   );
 
