@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-import { useMemo, useState } from "react";
+import { type FormEvent, useMemo, useState } from "react";
 import {
   type AnswerMap,
   type Assessment,
@@ -23,6 +23,12 @@ export default function Home() {
   const [resultAssessmentId, setResultAssessmentId] = useState<string | null>(
     null,
   );
+  const [leadAssessmentId, setLeadAssessmentId] = useState<string | null>(null);
+  const [leadForm, setLeadForm] = useState({ email: "", name: "" });
+  const [leadStatus, setLeadStatus] = useState<
+    "idle" | "sending" | "sent" | "error"
+  >("idle");
+  const [leadError, setLeadError] = useState("");
 
   const activeAssessment =
     assessments.find((assessment) => assessment.id === activeAssessmentId) ??
@@ -30,6 +36,9 @@ export default function Home() {
   const activeAnswers = answersByAssessment[activeAssessment.id] ?? {};
   const answeredCount = Object.keys(activeAnswers).length;
   const isComplete = answeredCount === activeAssessment.questions.length;
+  const leadAssessment = leadAssessmentId
+    ? assessments.find((assessment) => assessment.id === leadAssessmentId)
+    : null;
 
   const result = useMemo(() => {
     if (!resultAssessmentId) return null;
@@ -47,11 +56,18 @@ export default function Home() {
 
   function chooseAssessment(assessment: Assessment) {
     setActiveAssessmentId(assessment.id);
+    setLeadAssessmentId(null);
     setResultAssessmentId(null);
+    setLeadStatus("idle");
+    setLeadError("");
     document.getElementById("assessment")?.scrollIntoView({ block: "start" });
   }
 
   function answerQuestion(questionId: string, value: ScoreValue) {
+    setLeadAssessmentId(null);
+    setResultAssessmentId(null);
+    setLeadStatus("idle");
+    setLeadError("");
     setAnswersByAssessment((current) => ({
       ...current,
       [activeAssessment.id]: {
@@ -61,11 +77,44 @@ export default function Home() {
     }));
   }
 
-  function showResult() {
+  function requestReport() {
     if (!isComplete) return;
 
-    setResultAssessmentId(activeAssessment.id);
+    setLeadAssessmentId(activeAssessment.id);
+    setResultAssessmentId(null);
+    setLeadStatus("idle");
+    setLeadError("");
     document.getElementById("results")?.scrollIntoView({ block: "start" });
+  }
+
+  async function submitLeadForm(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!leadAssessment) return;
+
+    setLeadStatus("sending");
+    setLeadError("");
+
+    const response = await fetch("/api/leads", {
+      body: JSON.stringify({
+        answers: answersByAssessment[leadAssessment.id] ?? {},
+        assessmentId: leadAssessment.id,
+        email: leadForm.email,
+        name: leadForm.name,
+      }),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
+    const payload = (await response.json()) as { error?: string };
+
+    if (!response.ok) {
+      setLeadStatus("error");
+      setLeadError(payload.error ?? "Unable to send your report.");
+      return;
+    }
+
+    setLeadStatus("sent");
+    setResultAssessmentId(leadAssessment.id);
   }
 
   return (
@@ -211,10 +260,10 @@ export default function Home() {
               <button
                 className="border border-[var(--jt23-green)] bg-black px-5 py-3 text-sm font-bold text-[var(--jt23-green)] shadow-[0_0_24px_rgba(24,210,63,0.36)] transition enabled:hover:-translate-y-0.5 enabled:hover:bg-[#071f0d] enabled:hover:text-white disabled:cursor-not-allowed disabled:border-[var(--line)] disabled:bg-black disabled:text-[var(--muted)] disabled:shadow-none"
                 disabled={!isComplete}
-                onClick={showResult}
+                onClick={requestReport}
                 type="button"
               >
-                Show results
+                Get my report
               </button>
             </div>
           </div>
@@ -281,6 +330,86 @@ export default function Home() {
                   Book a Readiness Call
                 </a>
               </div>
+            </div>
+          ) : leadAssessment ? (
+            <div className="mt-6 grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+              <div className="border border-[var(--jt23-green)] bg-black p-6">
+                <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--jt23-green)]">
+                  Report ready
+                </p>
+                <h2 className="mt-4 text-3xl font-black tracking-tight">
+                  Email me my AI readiness report
+                </h2>
+                <p className="mt-4 leading-7 text-[var(--muted)]">
+                  Enter your name and email to receive the short report, then
+                  your score and next moves will unlock here.
+                </p>
+                <div className="mt-6 border border-[var(--line)] bg-[var(--panel)] p-4">
+                  <p className="text-sm font-bold text-white">
+                    {leadAssessment.title}
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                    Includes your score, maturity level, plain-English risk
+                    read, top three next steps, and the call booking link.
+                  </p>
+                </div>
+              </div>
+
+              <form
+                className="border border-[var(--line)] bg-[var(--background)] p-6"
+                onSubmit={submitLeadForm}
+              >
+                <label className="block text-sm font-bold text-white">
+                  Name
+                  <input
+                    className="mt-2 w-full border border-[var(--line)] bg-black px-4 py-3 text-white outline-none transition focus:border-[var(--jt23-green)]"
+                    name="name"
+                    onChange={(event) =>
+                      setLeadForm((current) => ({
+                        ...current,
+                        name: event.target.value,
+                      }))
+                    }
+                    required
+                    type="text"
+                    value={leadForm.name}
+                  />
+                </label>
+                <label className="mt-5 block text-sm font-bold text-white">
+                  Email
+                  <input
+                    className="mt-2 w-full border border-[var(--line)] bg-black px-4 py-3 text-white outline-none transition focus:border-[var(--jt23-green)]"
+                    name="email"
+                    onChange={(event) =>
+                      setLeadForm((current) => ({
+                        ...current,
+                        email: event.target.value,
+                      }))
+                    }
+                    required
+                    type="email"
+                    value={leadForm.email}
+                  />
+                </label>
+                <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
+                  We will use this to send your report and follow up about AI
+                  readiness. No client data is needed for this diagnostic.
+                </p>
+                {leadError ? (
+                  <p className="mt-4 border border-[#d97878] bg-black p-3 text-sm font-bold text-[#ffb3b3]">
+                    {leadError}
+                  </p>
+                ) : null}
+                <button
+                  className="mt-6 w-full border border-[var(--jt23-green)] bg-[var(--jt23-green)] px-5 py-3 text-sm font-bold text-black transition hover:bg-white disabled:cursor-wait disabled:bg-[#253026] disabled:text-[var(--muted)]"
+                  disabled={leadStatus === "sending"}
+                  type="submit"
+                >
+                  {leadStatus === "sending"
+                    ? "Sending report..."
+                    : "Email my report"}
+                </button>
+              </form>
             </div>
           ) : (
             <div className="mt-6 border border-[var(--line)] bg-black p-6">
@@ -395,8 +524,8 @@ function Hero() {
               ))}
             </div>
             <div className="mt-2 border border-[var(--jt23-green)] p-4 text-sm leading-6 text-white">
-              No names, emails, client data, or company details are collected.
-              This is a quick pressure test, not a surveillance tool.
+              No client data or company details are needed. Name and email are
+              only requested when you ask for the report.
             </div>
           </div>
         </div>

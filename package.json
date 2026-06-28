@@ -10,6 +10,7 @@
     "build": "vinext build",
     "start": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern .playwright-browsers --ignore-pattern .npm-cache --ignore-pattern .config --ignore-pattern .tmp",
+    "test:lead": "node --test tests/lead-magnet.test.ts",
     "test:scoring": "node --test tests/scoring.test.ts",
     "test:flow": "node --import tsx work/check-flow.tsx",
     "db:generate": "drizzle-kit generate"

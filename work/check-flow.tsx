@@ -11,6 +11,7 @@ const dom = new JSDOM("<!doctype html><html><body><div id='root'></div></body></
 Object.assign(globalThis, {
   window: dom.window,
   document: dom.window.document,
+  Event: dom.window.Event,
   HTMLElement: dom.window.HTMLElement,
   HTMLAnchorElement: dom.window.HTMLAnchorElement,
   MouseEvent: dom.window.MouseEvent,
@@ -25,6 +26,19 @@ Object.defineProperty(globalThis, "navigator", {
   .IS_REACT_ACT_ENVIRONMENT = true;
 
 window.HTMLElement.prototype.scrollIntoView = function scrollIntoView() {};
+
+const leadRequests: unknown[] = [];
+globalThis.fetch = async (_url, init) => {
+  leadRequests.push(JSON.parse(String(init?.body)));
+  return Response.json({
+    message: "Your report is on its way.",
+    result: {
+      assessmentTitle: "AI Literacy Check",
+      maturityName: "AI Curious",
+      score: 24,
+    },
+  });
+};
 
 function text() {
   return document.body.textContent ?? "";
@@ -42,6 +56,22 @@ async function click(element: Element) {
   await act(async () => {
     element.dispatchEvent(new MouseEvent("click", { bubbles: true }));
   });
+}
+
+async function typeInto(selector: string, value: string) {
+  const input = document.querySelector(selector) as HTMLInputElement | null;
+  assert.ok(input, `input not found: ${selector}`);
+
+  await act(async () => {
+    input.value = value;
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+}
+
+async function submitLeadForm() {
+  await typeInto('input[name="name"]', "Jordan Owner");
+  await typeInto('input[name="email"]', "owner@example.com");
+  await click(buttonByText("Email my report"));
 }
 
 async function answerAll(value: 1 | 2 | 3 | 4 | 5) {
@@ -83,16 +113,16 @@ async function expectVisualSelectionState() {
   );
 
   await answerAll(3);
-  const showResultsButton = buttonByText("Show results");
-  assert.equal(showResultsButton.hasAttribute("disabled"), false);
+  const reportButton = buttonByText("Get my report");
+  assert.equal(reportButton.hasAttribute("disabled"), false);
   assert.equal(
-    showResultsButton.className.includes("bg-[var(--jt23-green)]"),
+    reportButton.className.includes("bg-[var(--jt23-green)]"),
     false,
-    "Show results should avoid the filled light-green style",
+    "Report button should avoid the filled light-green style",
   );
   assert.ok(
-    showResultsButton.className.includes("shadow-[0_0_24px_rgba(24,210,63,0.36)]"),
-    "Show results should use a neon green treatment",
+    reportButton.className.includes("shadow-[0_0_24px_rgba(24,210,63,0.36)]"),
+    "Report button should use a neon green treatment",
   );
 }
 
@@ -106,7 +136,11 @@ async function expectAssessmentResult(
   assert.ok(text().includes(startButton.replace("Start ", "")));
 
   await answerAll(answerValue);
-  await click(buttonByText("Show results"));
+  await click(buttonByText("Get my report"));
+  assert.ok(text().includes("Email me my AI readiness report"));
+  assert.equal(text().includes("Top 3 moves to reduce risk"), false);
+
+  await submitLeadForm();
 
   assert.ok(text().includes(`${score}`), `score missing: ${score}`);
   assert.ok(text().includes(level), `level missing: ${level}`);
@@ -143,6 +177,7 @@ assert.equal(
   bookingLinks[0].href,
   "https://calendly.com/jtneumann23/jon-neumann-1x1",
 );
+assert.ok(leadRequests.length >= 4);
 
 for (const bannedWord of ["revolutionary", "synergy", "cutting-edge", "unlock the power"]) {
   assert.equal(text().toLowerCase().includes(bannedWord), false);
