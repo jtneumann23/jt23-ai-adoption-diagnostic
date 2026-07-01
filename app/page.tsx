@@ -10,8 +10,14 @@ import {
   getMaturityLevel,
   scoreAssessment,
 } from "./lib/diagnostic";
+import {
+  aiChallengeOptions,
+  buildWeb3FormsLeadPayload,
+  web3FormsEndpoint,
+} from "./lib/web3forms-lead";
 
 const bookingLink = "https://calendly.com/jtneumann23/jon-neumann-1x1";
+const web3FormsAccessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "";
 
 export default function Home() {
   const [activeAssessmentId, setActiveAssessmentId] = useState(
@@ -24,7 +30,6 @@ export default function Home() {
     null,
   );
   const [leadAssessmentId, setLeadAssessmentId] = useState<string | null>(null);
-  const [leadForm, setLeadForm] = useState({ email: "", name: "" });
   const [leadStatus, setLeadStatus] = useState<
     "idle" | "sending" | "sent" | "error"
   >("idle");
@@ -95,26 +100,62 @@ export default function Home() {
     setLeadStatus("sending");
     setLeadError("");
 
-    const response = await fetch("/api/leads", {
-      body: JSON.stringify({
-        answers: answersByAssessment[leadAssessment.id] ?? {},
-        assessmentId: leadAssessment.id,
-        email: leadForm.email,
-        name: leadForm.name,
-      }),
-      headers: { "content-type": "application/json" },
-      method: "POST",
-    });
-    const payload = (await response.json()) as { error?: string };
-
-    if (!response.ok) {
+    if (!web3FormsAccessKey) {
       setLeadStatus("error");
-      setLeadError(payload.error ?? "Unable to send your report.");
+      setLeadError(
+        "This form is not connected yet. Add the Web3Forms access key to unlock reports.",
+      );
       return;
     }
 
-    setLeadStatus("sent");
-    setResultAssessmentId(leadAssessment.id);
+    const answers = answersByAssessment[leadAssessment.id] ?? {};
+    const score = scoreAssessment(answers);
+    const maturity = getMaturityLevel(score);
+    const formData = new FormData(event.currentTarget);
+    const leadForm = {
+      challenge: String(formData.get("challenge") ?? ""),
+      company: String(formData.get("company") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      name: String(formData.get("name") ?? ""),
+    };
+
+    try {
+      const response = await fetch(web3FormsEndpoint, {
+        body: JSON.stringify(
+          buildWeb3FormsLeadPayload(
+            web3FormsAccessKey,
+            leadForm,
+            {
+              answers,
+              assessment: leadAssessment,
+              maturity,
+              score,
+            },
+          ),
+        ),
+        headers: {
+          "accept": "application/json",
+          "content-type": "application/json",
+        },
+        method: "POST",
+      });
+      const payload = (await response.json()) as {
+        message?: string;
+        success?: boolean;
+      };
+
+      if (!response.ok || payload.success === false) {
+        setLeadStatus("error");
+        setLeadError(payload.message ?? "Unable to unlock your report.");
+        return;
+      }
+
+      setLeadStatus("sent");
+      setResultAssessmentId(leadAssessment.id);
+    } catch {
+      setLeadStatus("error");
+      setLeadError("Unable to reach the report form. Try again in a minute.");
+    }
   }
 
   return (
@@ -338,11 +379,12 @@ export default function Home() {
                   Report ready
                 </p>
                 <h2 className="mt-4 text-3xl font-black tracking-tight">
-                  Email me my AI readiness report
+                  Unlock my AI readiness report
                 </h2>
                 <p className="mt-4 leading-7 text-[var(--muted)]">
-                  Enter your name and email to receive the short report, then
-                  your score and next moves will unlock here.
+                  Enter your contact details to see the full report here. JT23
+                  receives your score, maturity level, and biggest AI challenge
+                  so the follow-up can be specific.
                 </p>
                 <div className="mt-6 border border-[var(--line)] bg-[var(--panel)] p-4">
                   <p className="text-sm font-bold text-white">
@@ -364,15 +406,17 @@ export default function Home() {
                   <input
                     className="mt-2 w-full border border-[var(--line)] bg-black px-4 py-3 text-white outline-none transition focus:border-[var(--jt23-green)]"
                     name="name"
-                    onChange={(event) =>
-                      setLeadForm((current) => ({
-                        ...current,
-                        name: event.target.value,
-                      }))
-                    }
                     required
                     type="text"
-                    value={leadForm.name}
+                  />
+                </label>
+                <label className="mt-5 block text-sm font-bold text-white">
+                  Company
+                  <input
+                    className="mt-2 w-full border border-[var(--line)] bg-black px-4 py-3 text-white outline-none transition focus:border-[var(--jt23-green)]"
+                    name="company"
+                    required
+                    type="text"
                   />
                 </label>
                 <label className="mt-5 block text-sm font-bold text-white">
@@ -380,20 +424,29 @@ export default function Home() {
                   <input
                     className="mt-2 w-full border border-[var(--line)] bg-black px-4 py-3 text-white outline-none transition focus:border-[var(--jt23-green)]"
                     name="email"
-                    onChange={(event) =>
-                      setLeadForm((current) => ({
-                        ...current,
-                        email: event.target.value,
-                      }))
-                    }
                     required
                     type="email"
-                    value={leadForm.email}
                   />
                 </label>
+                <label className="mt-5 block text-sm font-bold text-white">
+                  Biggest AI challenge
+                  <select
+                    className="mt-2 w-full border border-[var(--line)] bg-black px-4 py-3 text-white outline-none transition focus:border-[var(--jt23-green)]"
+                    defaultValue={aiChallengeOptions[0]}
+                    name="challenge"
+                    required
+                  >
+                    {aiChallengeOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
                 <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
-                  We will use this to send your report and follow up about AI
-                  readiness. No client data is needed for this diagnostic.
+                  We will use this to unlock your report and follow up about AI
+                  readiness. No client, resident, or private operational data is
+                  needed for this diagnostic.
                 </p>
                 {leadError ? (
                   <p className="mt-4 border border-[#d97878] bg-black p-3 text-sm font-bold text-[#ffb3b3]">
@@ -406,8 +459,8 @@ export default function Home() {
                   type="submit"
                 >
                   {leadStatus === "sending"
-                    ? "Sending report..."
-                    : "Email my report"}
+                    ? "Unlocking report..."
+                    : "Unlock my report"}
                 </button>
               </form>
             </div>

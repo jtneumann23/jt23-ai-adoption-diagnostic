@@ -2,7 +2,6 @@ import assert from "node:assert/strict";
 import { JSDOM } from "jsdom";
 import React, { act } from "react";
 import { createRoot } from "react-dom/client";
-import Home from "../app/page";
 
 const dom = new JSDOM("<!doctype html><html><body><div id='root'></div></body></html>", {
   url: "http://localhost/",
@@ -12,6 +11,7 @@ Object.assign(globalThis, {
   window: dom.window,
   document: dom.window.document,
   Event: dom.window.Event,
+  FormData: dom.window.FormData,
   HTMLElement: dom.window.HTMLElement,
   HTMLAnchorElement: dom.window.HTMLAnchorElement,
   MouseEvent: dom.window.MouseEvent,
@@ -31,14 +31,13 @@ const leadRequests: unknown[] = [];
 globalThis.fetch = async (_url, init) => {
   leadRequests.push(JSON.parse(String(init?.body)));
   return Response.json({
-    message: "Your report is on its way.",
-    result: {
-      assessmentTitle: "AI Literacy Check",
-      maturityName: "AI Curious",
-      score: 24,
-    },
+    message: "Email sent successfully!",
+    success: true,
   });
 };
+
+process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY = "public-test-key";
+const { default: Home } = await import("../app/page");
 
 function text() {
   return document.body.textContent ?? "";
@@ -61,17 +60,24 @@ async function click(element: Element) {
 async function typeInto(selector: string, value: string) {
   const input = document.querySelector(selector) as HTMLInputElement | null;
   assert.ok(input, `input not found: ${selector}`);
+  const valueSetter = Object.getOwnPropertyDescriptor(
+    window.HTMLInputElement.prototype,
+    "value",
+  )?.set;
+  assert.ok(valueSetter, "input value setter not found");
 
   await act(async () => {
-    input.value = value;
+    valueSetter.call(input, value);
     input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
   });
 }
 
 async function submitLeadForm() {
   await typeInto('input[name="name"]', "Jordan Owner");
+  await typeInto('input[name="company"]', "Prairie Ops");
   await typeInto('input[name="email"]', "owner@example.com");
-  await click(buttonByText("Email my report"));
+  await click(buttonByText("Unlock my report"));
 }
 
 async function answerAll(value: 1 | 2 | 3 | 4 | 5) {
@@ -137,7 +143,8 @@ async function expectAssessmentResult(
 
   await answerAll(answerValue);
   await click(buttonByText("Get my report"));
-  assert.ok(text().includes("Email me my AI readiness report"));
+  assert.ok(text().includes("Unlock my AI readiness report"));
+  assert.ok(text().includes("Biggest AI challenge"));
   assert.equal(text().includes("Top 3 moves to reduce risk"), false);
 
   await submitLeadForm();
@@ -178,6 +185,12 @@ assert.equal(
   "https://calendly.com/jtneumann23/jon-neumann-1x1",
 );
 assert.ok(leadRequests.length >= 4);
+assert.equal((leadRequests[0] as Record<string, unknown>).access_key, "public-test-key");
+assert.equal((leadRequests[0] as Record<string, unknown>).company, "Prairie Ops");
+assert.equal(
+  (leadRequests[0] as Record<string, unknown>)["Biggest AI challenge"],
+  "Getting staff to use AI safely",
+);
 
 for (const bannedWord of ["revolutionary", "synergy", "cutting-edge", "unlock the power"]) {
   assert.equal(text().toLowerCase().includes(bannedWord), false);
