@@ -113,7 +113,7 @@ export function buildReportEmail(lead: LeadReport) {
   const nextSteps = lead.assessment.nextSteps
     .map((step) => `<li>${escapeHtml(step)}</li>`)
     .join("");
-  const plainSteps = lead.assessment.nextStepsdiagnosticdiagnostic.tsdiagnostic
+  const plainSteps = lead.assessment.nextSteps
     .map((step, index) => `${index + 1}. ${step}`)
     .join("\n");
 
