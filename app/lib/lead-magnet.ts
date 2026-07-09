@@ -4,7 +4,7 @@ import {
   assessments,
   getMaturityLevel,
   scoreAssessment,
-} from "./diagnostic.ts";
+} from "./diagnostic";
 
 const bookingLink = "https://calendly.com/jtneumann23/jon-neumann-1x1";
 const sourceName = "JT23 AI Adoption Diagnostic";
@@ -113,7 +113,7 @@ export function buildReportEmail(lead: LeadReport) {
   const nextSteps = lead.assessment.nextSteps
     .map((step) => `<li>${escapeHtml(step)}</li>`)
     .join("");
-  const plainSteps = lead.assessment.nextSteps
+  const plainSteps = lead.assessment.nextStepsdiagnosticdiagnostic.tsdiagnostic
     .map((step, index) => `${index + 1}. ${step}`)
     .join("\n");
 
