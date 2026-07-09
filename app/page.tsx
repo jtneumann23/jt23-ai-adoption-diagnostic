@@ -12,12 +12,9 @@ import {
 } from "./lib/diagnostic";
 import {
   aiChallengeOptions,
-  buildWeb3FormsLeadPayload,
-  web3FormsEndpoint,
 } from "./lib/web3forms-lead";
 
 const bookingLink = "https://calendly.com/jtneumann23/jon-neumann-1x1";
-const web3FormsAccessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "";
 
 export default function Home() {
   const [activeAssessmentId, setActiveAssessmentId] = useState(
@@ -100,17 +97,7 @@ export default function Home() {
     setLeadStatus("sending");
     setLeadError("");
 
-    if (!web3FormsAccessKey) {
-      setLeadStatus("error");
-      setLeadError(
-        "This form is not connected yet. Add the Web3Forms access key to unlock reports.",
-      );
-      return;
-    }
-
     const answers = answersByAssessment[leadAssessment.id] ?? {};
-    const score = scoreAssessment(answers);
-    const maturity = getMaturityLevel(score);
     const formData = new FormData(event.currentTarget);
     const leadForm = {
       challenge: String(formData.get("challenge") ?? ""),
@@ -120,18 +107,13 @@ export default function Home() {
     };
 
     try {
-      const response = await fetch(web3FormsEndpoint, {
+      const response = await fetch("/api/lead", {
         body: JSON.stringify(
-          buildWeb3FormsLeadPayload(
-            web3FormsAccessKey,
-            leadForm,
-            {
-              answers,
-              assessment: leadAssessment,
-              maturity,
-              score,
-            },
-          ),
+          {
+            answers,
+            assessmentId: leadAssessment.id,
+            lead: leadForm,
+          },
         ),
         headers: {
           "accept": "application/json",
@@ -411,11 +393,10 @@ export default function Home() {
                   />
                 </label>
                 <label className="mt-5 block text-sm font-bold text-white">
-                  Company
+                  Company <span className="text-[var(--muted)]">(optional)</span>
                   <input
                     className="mt-2 w-full border border-[var(--line)] bg-black px-4 py-3 text-white outline-none transition focus:border-[var(--jt23-green)]"
                     name="company"
-                    required
                     type="text"
                   />
                 </label>
